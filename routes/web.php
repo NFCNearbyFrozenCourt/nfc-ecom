@@ -81,10 +81,10 @@ include_once 'install_r.php';
 
 Route::middleware(['setData'])->group(function () {
     Route::get('/', function () {
-       
+
         if (Auth::check()) {
             $user = Auth::user();
-            
+
             if ($user->user_type == 'user_customer') {
                 return app(HomeController::class)->index();
             } else {
@@ -235,6 +235,11 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/sells/quotations', [SellController::class, 'getQuotations']);
     Route::get('/sells/draft-dt', [SellController::class, 'getDraftDatables']);
     Route::resource('sells', SellController::class)->except(['show']);
+
+    // Ecom Routes
+    Route::get('ecom-sells', [SellController::class, 'ecomSellList']);
+    Route::post('ecom-sell', [SellPosController::class, 'ecomStore']);
+    Route::get('ecom-create-sell', [SellController::class, 'ecomCreateSell']);
 
     Route::get('/import-sales', [ImportSalesController::class, 'index']);
     Route::post('/import-sales/preview', [ImportSalesController::class, 'preview']);
@@ -484,7 +489,7 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::resource('warranties', WarrantyController::class);
 
     Route::resource('dashboard-configurator', DashboardConfiguratorController::class)
-    ->only(['edit', 'update']);
+        ->only(['edit', 'update']);
 
     Route::get('view-media/{model_id}', [SellController::class, 'viewMedia']);
 
@@ -509,7 +514,6 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone', 
     Route::get('/show-ecom/darft/{id}', [SellController::class, 'showDraftEcom']);
     Route::get('/sells/editEcom/{id}', [SellController::class, 'editEcom'])->name('sells.editEcom');
     Route::get('ecom-create', [SellController::class, 'ecomcreate']);
-
 });
 
 // Route::middleware(['EcomApi'])->prefix('api/ecom')->group(function () {
@@ -534,8 +538,8 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone'])
     Route::get('/purchases/{id}', [PurchaseController::class, 'show']);
     Route::get('/download-purchase-order/{id}/pdf', [PurchaseOrderController::class, 'downloadPdf'])->name('purchaseOrder.downloadPdf');
     Route::get('/sells/{id}', [SellController::class, 'show']);
-   
-   
+
+
     Route::get('/sells/{transaction_id}/print', [SellPosController::class, 'printInvoice'])->name('sell.printInvoice');
     Route::get('/download-sells/{transaction_id}/pdf', [SellPosController::class, 'downloadPdf'])->name('sell.downloadPdf');
     Route::get('/download-quotation/{id}/pdf', [SellPosController::class, 'downloadQuotationPdf'])
@@ -544,6 +548,4 @@ Route::middleware(['setData', 'auth', 'SetSessionData', 'language', 'timezone'])
         ->name('packing.downloadPdf');
     Route::get('/sells/invoice-url/{id}', [SellPosController::class, 'showInvoiceUrl']);
     Route::get('/show-notification/{id}', [HomeController::class, 'showNotification']);
-
-  
 });

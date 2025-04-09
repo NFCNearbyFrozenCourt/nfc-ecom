@@ -19,7 +19,7 @@ class AdminSidebarMenu
     public function handle($request, Closure $next)
     {
 
-        
+
         if ($request->ajax()) {
             return $next($request);
         }
@@ -40,8 +40,8 @@ class AdminSidebarMenu
             //     <path d="M10 12h4v4h-4z"></path>
             //   </svg>', 'active' => request()->segment(1) == 'home'])->order(5);
 
-            
-                  
+
+
             $menu->url(action([\App\Http\Controllers\HomeController::class, 'index']), __('home.home'), ['icon' => '<svg xmlns="http://www.w3.org/2000/svg" class="tw-size-5 tw-shrink-0" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
@@ -83,7 +83,7 @@ class AdminSidebarMenu
                     <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
-                  </svg>', ]
+                  </svg>',]
                 )->order(10);
             }
 
@@ -141,10 +141,12 @@ class AdminSidebarMenu
             }
 
             //Products dropdown
-            if (auth()->user()->can('product.view') || auth()->user()->can('product.create') ||
+            if (
+                auth()->user()->can('product.view') || auth()->user()->can('product.create') ||
                 auth()->user()->can('brand.view') || auth()->user()->can('unit.view') ||
                 auth()->user()->can('category.view') || auth()->user()->can('brand.create') ||
-                auth()->user()->can('unit.create') || auth()->user()->can('category.create')) {
+                auth()->user()->can('unit.create') || auth()->user()->can('category.create')
+            ) {
                 $menu->dropdown(
                     __('sale.products'),
                     function ($sub) {
@@ -313,7 +315,18 @@ class AdminSidebarMenu
                             'Ecom Orders',
                             ['icon' => '', 'active' => request()->segment(1) == 'ecom-sales']
                         );
-            
+
+                        $sub->url(
+                            action([\App\Http\Controllers\SellController::class, 'ecomSellList']),
+                            'Ecom All Sales',
+                            ['icon' => '', 'active' => request()->segment(1) == 'ecom-sells' && request()->segment(2) == null]
+                        );
+
+                        $sub->url(
+                            action([\App\Http\Controllers\SellController::class, 'ecomCreateSell']),
+                            'Ecom Add Sales',
+                            ['icon' => '', 'active' => request()->segment(1) == 'ecom-create-sell']
+                        );
 
                         if ($is_admin || auth()->user()->hasAnyPermission(['sell.view', 'sell.create', 'direct_sell.access', 'direct_sell.view', 'view_own_sell_only', 'view_commission_agent_sell', 'access_shipping', 'access_own_shipping', 'access_commission_agent_shipping'])) {
                             $sub->url(
@@ -356,7 +369,7 @@ class AdminSidebarMenu
                         }
                         if (in_array('add_sale', $enabled_modules) && auth()->user()->can('direct_sell.access')) {
                             $sub->url(
-                                action([\App\Http\Controllers\SellController::class, 'ecomcreate'], ['status' => 'draft']),
+                                action([\App\Http\Controllers\SellController::class, 'ecomCreateSell'], ['status' => 'draft']),
                                 __('Add Ecom Draft'),
                                 ['icon' => '', 'active' => request()->get('status') == 'draft']
                             );
@@ -581,10 +594,12 @@ class AdminSidebarMenu
             }
 
             //Reports dropdown
-            if (auth()->user()->can('purchase_n_sell_report.view') || auth()->user()->can('contacts_report.view')
+            if (
+                auth()->user()->can('purchase_n_sell_report.view') || auth()->user()->can('contacts_report.view')
                 || auth()->user()->can('stock_report.view') || auth()->user()->can('tax_report.view')
                 || auth()->user()->can('trending_product_report.view') || auth()->user()->can('sales_representative.view') || auth()->user()->can('register_report.view')
-                || auth()->user()->can('expense_report.view')) {
+                || auth()->user()->can('expense_report.view')
+            ) {
                 $menu->dropdown(
                     __('report.reports'),
                     function ($sub) use ($enabled_modules, $is_admin) {
@@ -826,12 +841,14 @@ class AdminSidebarMenu
             }
 
             //Settings Dropdown
-            if (auth()->user()->can('business_settings.access') ||
+            if (
+                auth()->user()->can('business_settings.access') ||
                 auth()->user()->can('barcode_settings.access') ||
                 auth()->user()->can('invoice_settings.access') ||
                 auth()->user()->can('tax_rate.view') ||
                 auth()->user()->can('tax_rate.create') ||
-                auth()->user()->can('access_package_subscriptions')) {
+                auth()->user()->can('access_package_subscriptions')
+            ) {
                 $menu->dropdown(
                     __('business.settings'),
                     function ($sub) use ($enabled_modules) {
@@ -946,7 +963,7 @@ class AdminSidebarMenu
                     },
 
 
-                   
+
 
 
                     ['icon' => '<svg width="800px" class="tw-size-5 tw-shrink-0" height="800px" viewBox="0 0 512 512" id="Layer_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1123,8 +1140,6 @@ class AdminSidebarMenu
 
                 )->order(90);
             }
-        
-        
         });
 
         //Add menus from modules
