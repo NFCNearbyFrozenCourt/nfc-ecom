@@ -1,0 +1,14 @@
+{
+    "name": "Cashfree",
+    "alias": "cashfree",
+    "description": "Cashfree payment integration module",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Cashfree\\Providers\\CashfreeServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
+

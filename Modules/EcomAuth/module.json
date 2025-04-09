@@ -1,0 +1,13 @@
+{
+    "name": "EcomAuth",
+    "alias": "ecomauth",
+    "description": "Authentication Module for eCommerce Application",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\EcomAuth\\Providers\\EcomAuthServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
